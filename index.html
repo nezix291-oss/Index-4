@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FKW | Faction Kenway — DarkRP · Le Monde des Débutants</title>
+  <meta name="description" content="Famille criminelle sérieuse sur Le Monde des Débutants — serveur DarkRP Garry's Mod. Rejoins la Faction Kenway, gravis les rangs, respecte le code." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── TOKEN SYSTEM ──────────────────────────────────────── */
+    :root {
+      --bg-void:      #080a0f;
+      --bg-deep:      #0d1018;
+      --bg-card:      rgba(255,255,255,.04);
+      --bg-card-hover:rgba(255,255,255,.07);
+      --border:       rgba(255,255,255,.08);
+      --border-glow:  rgba(139,92,246,.4);
+
+      --purple-500:   #8b5cf6;
+      --purple-400:   #a78bfa;
+      --purple-300:   #c4b5fd;
+      --purple-glow:  rgba(139,92,246,.25);
+      --gold:         #f59e0b;
+      --gold-dim:     rgba(245,158,11,.15);
+      --red:          #ef4444;
+      --green:        #10b981;
+
+      --text-primary:   #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted:     #475569;
+
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body:    'Inter', sans-serif;
+      --font-mono:    'JetBrains Mono', monospace;
+    }
+
+    /* ── RESET ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-void);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ── NOISE TEXTURE OVERLAY ──────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(8,10,15,.85);
+      border-bottom: 1px solid var(--border);
+      padding: 0 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      letter-spacing: .05em;
+    }
+    .nav-logo .k-badge {
+      width: 38px; height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #7c3aed, #4f46e5);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; font-weight: 700;
+      box-shadow: 0 0 16px rgba(124,58,237,.5);
+    }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: .85rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--purple-400); }
+    .nav-cta {
+      background: linear-gradient(135deg, #7c3aed, #4f46e5);
+      color: #fff !important;
+      padding: 8px 18px;
+      border-radius: var(--radius-sm);
+      font-size: .82rem !important;
+      font-weight: 600 !important;
+      text-transform: uppercase !important;
+      letter-spacing: .06em !important;
+      transition: box-shadow .2s, transform .15s !important;
+    }
+    .nav-cta:hover {
+      box-shadow: 0 0 18px rgba(124,58,237,.6);
+      transform: translateY(-1px);
+    }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none; border: none;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--text-secondary);
+      border-radius: 2px;
+      transition: .3s;
+    }
+
+    /* ── HERO ───────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 5% 60px;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124,58,237,.2) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 80% 80%, rgba(79,70,229,.12) 0%, transparent 60%);
+    }
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, black 30%, transparent 80%);
+    }
+    .hero-content { position: relative; max-width: 820px; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(124,58,237,.15);
+      border: 1px solid rgba(124,58,237,.3);
+      border-radius: 50px;
+      padding: 6px 16px;
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--purple-300);
+      margin-bottom: 28px;
+    }
+    .hero-badge .dot {
+      width: 7px; height: 7px;
+      background: var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .6; transform: scale(.85); }
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3.5rem, 9vw, 7rem);
+      line-height: .95;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+    }
+    .hero h1 .accent {
+      background: linear-gradient(135deg, var(--purple-400), #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      margin-top: 20px;
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 540px;
+      margin-left: auto; margin-right: auto;
+    }
+    .hero-sub strong { color: var(--text-primary); }
+    .hero-actions {
+      margin-top: 36px;
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #7c3aed, #4f46e5);
+      color: #fff;
+      padding: 13px 28px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: .92rem;
+      letter-spacing: .03em;
+      transition: box-shadow .2s, transform .15s;
+    }
+    .btn-primary:hover {
+      box-shadow: 0 0 30px rgba(124,58,237,.55);
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 13px 28px;
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+      font-size: .92rem;
+      transition: border-color .2s, color .2s, background .2s;
+    }
+    .btn-secondary:hover {
+      border-color: var(--purple-500);
+      color: var(--purple-300);
+      background: var(--bg-card-hover);
+    }
+    .hero-stats {
+      margin-top: 64px;
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      flex-wrap: wrap;
+    }
+    .stat {
+      padding: 0 36px;
+      border-right: 1px solid var(--border);
+      text-align: center;
+    }
+    .stat:last-child { border-right: none; }
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 2.6rem;
+      line-height: 1;
+      color: var(--purple-400);
+    }
+    .stat-label {
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* ── SECTION LAYOUT ─────────────────────────────────────── */
+    section { padding: 90px 5%; position: relative; }
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: .75rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--purple-500);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      letter-spacing: .03em;
+      text-transform: uppercase;
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      max-width: 520px;
+      margin-bottom: 52px;
+    }
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    /* ── ABOUT ──────────────────────────────────────────────── */
+    #about { background: var(--bg-deep); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .about-text p {
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+      font-size: .97rem;
+    }
+    .about-text p strong { color: var(--text-primary); }
+    .code-card {
+      background: rgba(0,0,0,.5);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      font-family: var(--font-mono);
+      font-size: .82rem;
+      line-height: 1.9;
+      color: var(--text-secondary);
+    }
+    .code-card .kw { color: var(--purple-400); }
+    .code-card .str { color: #86efac; }
+    .code-card .num { color: var(--gold); }
+    .code-card .comment { color: var(--text-muted); }
+    .code-header {
+      display: flex;
+      gap: 7px;
+      margin-bottom: 18px;
+    }
+    .code-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+    }
+    .code-dot.r { background: #ef4444; }
+    .code-dot.y { background: #f59e0b; }
+    .code-dot.g { background: #10b981; }
+
+    /* ── RULES ──────────────────────────────────────────────── */
+    #rules {
+      background: var(--bg-void);
+    }
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .rule-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      transition: border-color .2s, background .2s, transform .2s;
+    }
+    .rule-card:hover {
+      border-color: var(--border-glow);
+      background: var(--bg-card-hover);
+      transform: translateY(-3px);
+    }
+    .rule-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px; height: 36px;
+      border-radius: var(--radius-sm);
+      background: rgba(124,58,237,.2);
+      border: 1px solid rgba(124,58,237,.35);
+      font-family: var(--font-mono);
+      font-size: .85rem;
+      font-weight: 700;
+      color: var(--purple-400);
+      margin-bottom: 14px;
+    }
+    .rule-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .rule-card p { font-size: .88rem; color: var(--text-secondary); }
+
+    /* ── HIERARCHY ──────────────────────────────────────────── */
+    #hierarchy { background: var(--bg-deep); }
+    .hierarchy-columns {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 24px;
+    }
+    .rank-group {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+    .rank-group-header {
+      padding: 14px 20px;
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+    .rank-group-header.elite {
+      background: rgba(245,158,11,.12);
+      color: var(--gold);
+      border-color: rgba(245,158,11,.2);
+    }
+    .rank-group-header.officer {
+      background: rgba(139,92,246,.12);
+      color: var(--purple-300);
+      border-color: rgba(139,92,246,.2);
+    }
+    .rank-group-header.sub {
+      background: rgba(148,163,184,.08);
+      color: #94a3b8;
+    }
+    .rank-group-header.soldier {
+      background: rgba(16,185,129,.08);
+      color: #6ee7b7;
+      border-color: rgba(16,185,129,.15);
+    }
+    .rank-list { list-style: none; padding: 12px 0; }
+    .rank-list li {
+      padding: 9px 20px;
+      font-size: .88rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255,255,255,.03);
+    }
+    .rank-list li:last-child { border-bottom: none; }
+    .rank-list li::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+    .rank-list li.top::before { background: var(--gold); box-shadow: 0 0 6px var(--gold); }
+    .rank-list li.high::before { background: var(--purple-400); }
+
+    /* ── HOW TO JOIN ────────────────────────────────────────── */
+    #join { background: var(--bg-void); }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      counter-reset: step;
+    }
+    .step-card {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 28px 24px 24px;
+      counter-increment: step;
+    }
+    .step-card::before {
+      content: "0" counter(step);
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      color: rgba(139,92,246,.12);
+      position: absolute;
+      top: 10px; right: 16px;
+      line-height: 1;
+    }
+    .step-icon {
+      width: 44px; height: 44px;
+      border-radius: var(--radius-sm);
+      background: rgba(124,58,237,.15);
+      border: 1px solid rgba(124,58,237,.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 16px;
+    }
+    .step-card h3 {
+      font-size: .97rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .step-card p { font-size: .86rem; color: var(--text-secondary); }
+
+    /* ── LINKS ──────────────────────────────────────────────── */
+    #links { background: var(--bg-deep); }
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 18px;
+    }
+    .link-card {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 22px 24px;
+      transition: border-color .2s, background .2s, transform .15s;
+    }
+    .link-card:hover {
+      border-color: var(--border-glow);
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+    }
+    .link-icon {
+      width: 48px; height: 48px; flex-shrink: 0;
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+    }
+    .link-icon.discord { background: rgba(88,101,242,.2); border: 1px solid rgba(88,101,242,.35); }
+    .link-icon.gmod    { background: rgba(245,158,11,.12); border: 1px solid rgba(245,158,11,.25); }
+    .link-icon.forum   { background: rgba(16,185,129,.1);  border: 1px solid rgba(16,185,129,.25); }
+    .link-body { flex: 1; min-width: 0; }
+    .link-body strong { display: block; font-size: .95rem; font-weight: 600; margin-bottom: 3px; }
+    .link-body span { font-size: .82rem; color: var(--text-secondary); }
+    .link-arrow { color: var(--text-muted); font-size: 1.1rem; transition: color .2s, transform .2s; }
+    .link-card:hover .link-arrow { color: var(--purple-400); transform: translateX(3px); }
+
+    /* ── FAQ ────────────────────────────────────────────────── */
+    #faq { background: var(--bg-void); }
+    .faq-list { max-width: 720px; display: flex; flex-direction: column; gap: 12px; }
+    .faq-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+    .faq-q {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 22px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      color: var(--text-primary);
+      font-size: .95rem;
+      font-weight: 500;
+      font-family: var(--font-body);
+      gap: 12px;
+    }
+    .faq-q:focus-visible { outline: 2px solid var(--purple-500); outline-offset: 2px; }
+    .faq-chevron { transition: transform .3s; flex-shrink: 0; color: var(--text-muted); }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); }
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .35s ease, padding .35s;
+      font-size: .88rem;
+      color: var(--text-secondary);
+      padding: 0 22px;
+    }
+    .faq-item.open .faq-a {
+      max-height: 200px;
+      padding: 0 22px 18px;
+    }
+
+    /* ── CTA BANNER ─────────────────────────────────────────── */
+    .cta-banner {
+      position: relative;
+      background: linear-gradient(135deg, rgba(124,58,237,.25), rgba(79,70,229,.15));
+      border: 1px solid rgba(124,58,237,.3);
+      border-radius: var(--radius-lg);
+      padding: 60px 48px;
+      text-align: center;
+      overflow: hidden;
+      margin: 90px 5%;
+    }
+    .cta-banner::before {
+      content: '';
+      position: absolute;
+      top: -80px; left: 50%;
+      transform: translateX(-50%);
+      width: 400px; height: 300px;
+      background: radial-gradient(ellipse, rgba(124,58,237,.3), transparent 70%);
+      pointer-events: none;
+    }
+    .cta-banner h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .cta-banner p {
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      font-size: 1rem;
+      max-width: 480px;
+      margin-left: auto; margin-right: auto;
+    }
+
+    /* ── FOOTER ─────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 36px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      letter-spacing: .06em;
+      color: var(--text-secondary);
+    }
+    .footer-logo span { color: var(--purple-400); }
+    footer p { font-size: .8rem; color: var(--text-muted); }
+    .footer-links { display: flex; gap: 20px; list-style: none; }
+    .footer-links a { font-size: .8rem; color: var(--text-muted); transition: color .2s; }
+    .footer-links a:hover { color: var(--purple-400); }
+
+    /* ── DIVIDER ─────────────────────────────────────────────── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0 5%;
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 64px; left: 0; right: 0;
+        background: rgba(8,10,15,.97);
+        backdrop-filter: blur(20px);
+        padding: 24px 5%;
+        border-bottom: 1px solid var(--border);
+        gap: 16px;
+      }
+      .about-grid { grid-template-columns: 1fr; }
+      .hero-stats .stat { padding: 0 18px; }
+      .stat-num { font-size: 2rem; }
+      .cta-banner { padding: 40px 24px; }
+      section { padding: 60px 5%; }
+    }
+    @media (max-width: 480px) {
+      .hero-stats { gap: 12px; flex-direction: column; align-items: center; }
+      .stat { border-right: none; border-bottom: 1px solid var(--border); padding: 12px 0; width: 100%; }
+      .stat:last-child { border-bottom: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ──────────────────────────────────────────── -->
+<nav aria-label="Navigation principale">
+  <div class="nav-logo">
+    <div class="k-badge" aria-hidden="true">K</div>
+    FKW | Faction Kenway
+  </div>
+  <ul class="nav-links" id="navLinks" role="list">
+    <li><a href="#about">À propos</a></li>
+    <li><a href="#rules">Règlement</a></li>
+    <li><a href="#hierarchy">Hiérarchie</a></li>
+    <li><a href="#join">Rejoindre</a></li>
+    <li><a href="#links">Liens</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="https://discord.gg/G4bmWN2s6S" class="nav-cta" target="_blank" rel="noopener">Discord</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Ouvrir le menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────────────── -->
+<header class="hero" role="banner">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="hero-content">
+    <div class="hero-badge" role="status">
+      <span class="dot" aria-hidden="true"></span>
+      50+ membres en ligne · Actif depuis juin 2025
+    </div>
+    <h1>
+      Faction<br />
+      <span class="accent">Kenway</span>
+    </h1>
+    <p class="hero-sub">
+      La famille criminelle la plus redoutée de <strong>Le Monde des Débutants</strong>.
+      Discipline. Loyauté. Sérieux absolu. Tu ne rejoins pas un gang — tu rejoins une <strong>famille</strong>.
+    </p>
+    <div class="hero-actions">
+      <a href="https://discord.gg/G4bmWN2s6S" class="btn-primary" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057.1 18.079.11 18.1.132 18.115a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+        Rejoindre le Discord
+      </a>
+      <a href="https://discord.gg/C7vUeGta3j" class="btn-secondary" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        Serveur GMod
+      </a>
+    </div>
+    <div class="hero-stats" role="region" aria-label="Statistiques du serveur">
+      <div class="stat">
+        <div class="stat-num">126</div>
+        <div class="stat-label">Membres</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">50+</div>
+        <div class="stat-label">En ligne</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">DarkRP</div>
+        <div class="stat-label">Gamemode</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">2025</div>
+        <div class="stat-label">Fondée</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ── ABOUT ─────────────────────────────────────────────────── -->
+<section id="about">
+  <div class="container">
+    <p class="section-label">// Présentation</p>
+    <div class="about-grid">
+      <div class="about-text">
+        <h2 class="section-title">Qui sommes-<br/>nous ?</h2>
+        <p>
+          La <strong>Faction Kenway (FKW)</strong> est une famille criminelle organisée sur le serveur DarkRP
+          <strong>Le Monde des Débutants</strong> de TeamPeinard. Depuis juin 2025, nous incarnons une organisation
+          structurée, où chaque membre a un rôle, une responsabilité et un rang à défendre.
+        </p>
+        <p>
+          Nous ne cherchons pas des joueurs passifs. Nous cherchons des personnes capables de <strong>s'investir
+          dans le roleplay</strong>, de respecter la chaîne de commandement et de faire honneur au nom Kenway
+          sur et en dehors du serveur.
+        </p>
+        <p>
+          Sur <strong>Le Monde des Débutants</strong>, le DarkRP est pris au sérieux. Les règles du serveur
+          encadrent les interactions entre factions, les braquages, les contrôles de territoire et les
+          candidatures. Comprendre ces règles est une obligation pour tout membre Kenway.
+        </p>
+        <div style="margin-top: 28px; display: flex; gap: 12px; flex-wrap: wrap;">
+          <a href="https://forum.teampeinard.net/portal.php" class="btn-secondary" target="_blank" rel="noopener" style="font-size:.84rem; padding:10px 18px;">
+            📋 Forum TeamPeinard
+          </a>
+          <a href="#join" class="btn-primary" style="font-size:.84rem; padding:10px 18px;">
+            Postuler maintenant
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="code-card" role="figure" aria-label="Profil de la faction">
+          <div class="code-header">
+            <div class="code-dot r"></div>
+            <div class="code-dot y"></div>
+            <div class="code-dot g"></div>
+          </div>
+          <div><span class="comment">// faction.config.lua</span></div>
+          <br/>
+          <div><span class="kw">local</span> FKW = {}</div>
+          <br/>
+          <div>FKW.<span class="kw">name</span>     = <span class="str">"Faction Kenway"</span></div>
+          <div>FKW.<span class="kw">tag</span>      = <span class="str">"FKW"</span></div>
+          <div>FKW.<span class="kw">server</span>   = <span class="str">"Le Monde des Débutants"</span></div>
+          <div>FKW.<span class="kw">gamemode</span> = <span class="str">"DarkRP"</span></div>
+          <div>FKW.<span class="kw">members</span>  = <span class="num">126</span></div>
+          <div>FKW.<span class="kw">since</span>    = <span class="num">2025</span></div>
+          <br/>
+          <div>FKW.<span class="kw">values</span> = {</div>
+          <div>&nbsp;&nbsp;<span class="str">"Loyauté"</span>,</div>
+          <div>&nbsp;&nbsp;<span class="str">"Discipline"</span>,</div>
+          <div>&nbsp;&nbsp;<span class="str">"Sérieux RP"</span>,</div>
+          <div>&nbsp;&nbsp;<span class="str">"Confidentialité"</span></div>
+          <div>}</div>
+          <br/>
+          <div><span class="kw">return</span> FKW</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider" aria-hidden="true"></div>
+
+<!-- ── RULES ─────────────────────────────────────────────────── -->
+<section id="rules">
+  <div class="container">
+    <p class="section-label">// Règlement interne</p>
+    <h2 class="section-title">Le Code Kenway</h2>
+    <p class="section-sub">
+      Ces règles sont non-négociables. Les enfreindre, c'est risquer un avertissement ou une exclusion définitive de la famille.
+    </p>
+    <div class="rules-grid" role="list">
+
+      <article class="rule-card" role="listitem">
+        <div class="rule-num">01</div>
+        <h3>Respect & Conduite</h3>
+        <p>Aucune insulte, discrimination ou provocation tolérée. Chaque membre représente la famille — en jeu comme sur Discord.</p>
+      </article>
+
+      <article class="rule-card" role="listitem">
+        <div class="rule-num">02</div>
+        <h3>Roleplay & Sérieux</h3>
+        <p>La Faction Kenway est une famille sérieuse. Tu incarnes ton personnage en permanence. Pas de FailRP, pas de sortie de personnage sans raison valable.</p>
+      </article>
+
+      <article class="rule-card" role="listitem">
+        <div class="rule-num">03</div>
+        <h3>Confidentialité & Loyauté</h3>
+        <p>Les informations internes (plans, contacts, bases) ne sortent jamais du serveur. Toute trahison sera sanctionnée sévèrement.</p>
+      </article>
+
+      <article class="rule-card" role="listitem">
+        <div class="rule-num">04</div>
+        <h3>Communication</h3>
+        <p>Les décisions importantes se prennent avec les hauts gradés. Tu ne peux pas agir seul dans des situations engageant la famille.</p>
+      </article>
+
+      <article class="rule-card" role="listitem">
+        <div class="rule-num">05</div>
+        <h3>Activité & Engagement</h3>
+        <p>Sois présent et impliqué. Un membre inactif sans prévenir dans le salon <code style="font-family:var(--font-mono); color:var(--purple-300); font-size:.8rem;">#absence</code> peut être exclu.</p>
+      </article>
+
+      <article class="rule-card" role="listitem">
+        <div class="rule-num">06</div>
+        <h3>Sanctions</h3>
+        <p>Avertissements graduels en cas de manquement. Une exclusion temporaire ou définitive peut être appliquée selon la gravité des actes.</p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider" aria-hidden="true"></div>
+
+<!-- ── HIERARCHY ─────────────────────────────────────────────── -->
+<section id="hierarchy">
+  <div class="container">
+    <p class="section-label">// Structure interne</p>
+    <h2 class="section-title">Hiérarchie</h2>
+    <p class="section-sub">
+      La Faction Kenway est organisée en plusieurs échelons. Chaque grade s'obtient par mérite, loyauté et investissement.
+    </p>
+    <div class="hierarchy-columns" role="list">
+
+      <div class="rank-group" role="listitem">
+        <div class="rank-group-header elite">⭐ État-Major</div>
+        <ul class="rank-list">
+          <li class="top">Chef Kenway</li>
+          <li class="top">Général</li>
+          <li class="high">Lieutenant-Général</li>
+        </ul>
+      </div>
+
+      <div class="rank-group" role="listitem">
+        <div class="rank-group-header officer">🎖 Officiers Supérieurs</div>
+        <ul class="rank-list">
+          <li class="high">Commandant</li>
+          <li class="high">Capitaine</li>
+        </ul>
+      </div>
+
+      <div class="rank-group" role="listitem">
+        <div class="rank-group-header officer">🏅 Officiers</div>
+        <ul class="rank-list">
+          <li>Lieutenant</li>
+          <li>Sous-Lieutenant</li>
+          <li>Élève Officier</li>
+        </ul>
+      </div>
+
+      <div class="rank-group" role="listitem">
+        <div class="rank-group-header sub">🔰 Sous-Officiers</div>
+        <ul class="rank-list">
+          <li>Major</li>
+          <li>Adjudant-Chef</li>
+          <li>Adjudant</li>
+          <li>Sergent-Chef</li>
+          <li>Sergent</li>
+        </ul>
+      </div>
+
+      <div class="rank-group" role="listitem">
+        <div class="rank-group-header soldier">⚔ Militaire De Rang</div>
+        <ul class="rank-list">
+          <li>Caporal-Chef</li>
+          <li>Caporal</li>
+          <li>Soldat 1ère classe</li>
+        </ul>
+      </div>
+
+    </div>
+    <p style="margin-top: 24px; font-size: .82rem; color: var(--text-muted); font-family: var(--font-mono);">
+      // La hiérarchie complète est disponible dans le salon <span style="color: var(--purple-400);">#hiérarchie</span> du Discord.
+    </p>
+  </div>
+</section>
+
+<div class="divider" aria-hidden="true"></div>
+
+<!-- ── HOW TO JOIN ────────────────────────────────────────────── -->
+<section id="join">
+  <div class="container">
+    <p class="section-label">// Recrutement</p>
+    <h2 class="section-title">Comment rejoindre ?</h2>
+    <p class="section-sub">
+      Rejoindre la Faction Kenway ne se fait pas sur un coup de tête. Suis ces étapes dans l'ordre.
+    </p>
+    <div class="steps" role="list">
+
+      <div class="step-card" role="listitem">
+        <div class="step-icon" aria-hidden="true">🎮</div>
+        <h3>Joue sur le serveur</h3>
+        <p>Connecte-toi sur <strong>Le Monde des Débutants</strong> (DarkRP), familiarise-toi avec les règles du serveur et du DarkRP.</p>
+      </div>
+
+      <div class="step-card" role="listitem">
+        <div class="step-icon" aria-hidden="true">📖</div>
+        <h3>Lis le règlement</h3>
+        <p>Consulte le salon <code style="font-family:var(--font-mono); color:var(--purple-300); font-size:.8rem;">#règlement-serveur</code> et <code style="font-family:var(--font-mono); color:var(--purple-300); font-size:.8rem;">#reglement</code> sur notre Discord avant de postuler.</p>
+      </div>
+
+      <div class="step-card" role="listitem">
+        <div class="step-icon" aria-hidden="true">📋</div>
+        <h3>Dépose une candidature</h3>
+        <p>Utilise le salon <code style="font-family:var(--font-mono); color:var(--purple-300); font-size:.8rem;">#exemple-candidature</code> comme modèle et poste ta candidature dans le bon canal.</p>
+      </div>
+
+      <div class="step-card" role="listitem">
+        <div class="step-icon" aria-hidden="true">🎤</div>
+        <h3>Entretien vocal</h3>
+        <p>Si ta candidature est retenue, un gradé te contactera pour un entretien dans un salon vocal.</p>
+      </div>
+
+      <div class="step-card" role="listitem">
+        <div class="step-icon" aria-hidden="true">✅</div>
+        <h3>Intégration</h3>
+        <p>Une fois accepté, tu obtiens le grade de Soldat et tu commences ta montée en rang selon ton mérite.</p>
+      </div>
+
+    </div>
+
+    <div style="margin-top: 40px; padding: 24px; background: var(--bg-card); border: 1px solid rgba(245,158,11,.2); border-radius: var(--radius-md);">
+      <p style="font-size:.9rem; color: var(--gold);">
+        ⚠️ <strong>Conditions minimales :</strong>
+      </p>
+      <ul style="margin-top:10px; color: var(--text-secondary); font-size:.87rem; list-style: none; display: flex; flex-direction: column; gap: 7px;">
+        <li>→ Avoir un microphone fonctionnel</li>
+        <li>→ Avoir joué au moins quelques heures en DarkRP</li>
+        <li>→ Être sérieux, respectueux et disponible</li>
+        <li>→ Accepter le règlement interne sans réserve</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="divider" aria-hidden="true"></div>
+
+<!-- ── LINKS ─────────────────────────────────────────────────── -->
+<section id="links">
+  <div class="container">
+    <p class="section-label">// Liens utiles</p>
+    <h2 class="section-title">Ressources</h2>
+    <p class="section-sub">Tout ce dont tu as besoin pour t'intégrer à la communauté Kenway et au serveur.</p>
+    <div class="links-grid" role="list">
+
+      <a href="https://discord.gg/G4bmWN2s6S" class="link-card" target="_blank" rel="noopener" role="listitem">
+        <div class="link-icon discord" aria-hidden="true">💬</div>
+        <div class="link-body">
+          <strong>Discord Faction Kenway</strong>
+          <span>Serveur officiel · Candidatures · Vocal</span>
+        </div>
+        <span class="link-arrow" aria-hidden="true">→</span>
+      </a>
+
+      <a href="https://discord.gg/C7vUeGta3j" class="link-card" target="_blank" rel="noopener" role="listitem">
+        <div class="link-icon gmod" aria-hidden="true">🎮</div>
+        <div class="link-body">
+          <strong>Discord TeamPeinard</strong>
+          <span>Le Monde des Débutants · Annonces GMod</span>
+        </div>
+        <span class="link-arrow" aria-hidden="true">→</span>
+      </a>
+
+      <a href="https://forum.teampeinard.net/portal.php" class="link-card" target="_blank" rel="noopener" role="listitem">
+        <div class="link-icon forum" aria-hidden="true">📋</div>
+        <div class="link-body">
+          <strong>Forum TeamPeinard</strong>
+          <span>Règles · Candidatures · Rapports</span>
+        </div>
+        <span class="link-arrow" aria-hidden="true">→</span>
+      </a>
+
+      <a href="https://forum.teampeinard.net/portal.php" class="link-card" target="_blank" rel="noopener" role="listitem">
+        <div class="link-icon gmod" aria-hidden="true">📜</div>
+        <div class="link-body">
+          <strong>Règlement du serveur GMod</strong>
+          <span>Règles DarkRP officielles · Sanctions</span>
+        </div>
+        <span class="link-arrow" aria-hidden="true">→</span>
+      </a>
+
+      <a href="https://store.steampowered.com/app/4000/Garrys_Mod/" class="link-card" target="_blank" rel="noopener" role="listitem">
+        <div class="link-icon gmod" aria-hidden="true">🛒</div>
+        <div class="link-body">
+          <strong>Acheter Garry's Mod</strong>
+          <span>Disponible sur Steam · Nécessaire pour jouer</span>
+        </div>
+        <span class="link-arrow" aria-hidden="true">→</span>
+      </a>
+
+      <div class="link-card" role="listitem" style="cursor: default;">
+        <div class="link-icon discord" aria-hidden="true">🎫</div>
+        <div class="link-body">
+          <strong>Ouvrir un ticket</strong>
+          <span>Canal <code style="font-family:var(--font-mono); font-size:.78rem;">#ouvrir-un-ticket</code> sur notre Discord</span>
+        </div>
+        <span class="link-arrow" aria-hidden="true" style="opacity:.3;">→</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider" aria-hidden="true"></div>
+
+<!-- ── FAQ ───────────────────────────────────────────────────── -->
+<section id="faq">
+  <div class="container">
+    <p class="section-label">// Questions fréquentes</p>
+    <h2 class="section-title">FAQ</h2>
+    <div class="faq-list" role="list">
+
+      <div class="faq-item" role="listitem">
+        <button class="faq-q" aria-expanded="false">
+          <span>Faut-il être expérimenté en DarkRP pour postuler ?</span>
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-a">
+          Une expérience de base en DarkRP est recommandée, mais pas obligatoire. Ce qui compte, c'est ta motivation, ton sérieux et ta volonté d'apprendre. Le serveur "Le Monde des Débutants" est justement fait pour accueillir les nouveaux joueurs.
+        </div>
+      </div>
+
+      <div class="faq-item" role="listitem">
+        <button class="faq-q" aria-expanded="false">
+          <span>Peut-on appartenir à une autre faction en même temps ?</span>
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-a">
+          Non. La Faction Kenway exige une loyauté exclusive. Appartenir à une autre famille criminelle sur le serveur est considéré comme une trahison et entraîne une exclusion immédiate.
+        </div>
+      </div>
+
+      <div class="faq-item" role="listitem">
+        <button class="faq-q" aria-expanded="false">
+          <span>Comment monter en grade ?</span>
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-a">
+          Les promotions sont décidées par les hauts gradés en fonction de ton activité, ton comportement en jeu, ton respect du règlement et ton investissement dans la famille. Il n'y a pas de délai fixe — tout dépend de toi.
+        </div>
+      </div>
+
+      <div class="faq-item" role="listitem">
+        <button class="faq-q" aria-expanded="false">
+          <span>Que faire en cas d'absence prolongée ?</span>
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-a">
+          Prévenez toujours dans le salon <strong>#absence</strong> sur le Discord. Une absence sans prévenir peut mener à une exclusion. On comprend les imprévus — on n'excuse pas le silence.
+        </div>
+      </div>
+
+      <div class="faq-item" role="listitem">
+        <button class="faq-q" aria-expanded="false">
+          <span>Le serveur GMod est-il payant ?</span>
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-a">
+          Le serveur "Le Monde des Débutants" est gratuit d'accès. Il te suffit de posséder Garry's Mod sur Steam (disponible dès 10€, souvent en promotion). Le forum TeamPeinard peut proposer des grades VIP optionnels.
+        </div>
+      </div>
+
+      <div class="faq-item" role="listitem">
+        <button class="faq-q" aria-expanded="false">
+          <span>Comment signaler un problème avec un membre ?</span>
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-a">
+          Ouvre un ticket via le canal <strong>#ouvrir-un-ticket</strong> sur le Discord de la Faction Kenway. Pour des manquements aux règles du serveur GMod, utilise le forum TeamPeinard.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA BANNER ─────────────────────────────────────────────── -->
+<div class="cta-banner" role="complementary" aria-label="Rejoindre la faction">
+  <h2>Prêt à rejoindre<br/>la famille ?</h2>
+  <p>La Faction Kenway recrute des membres sérieux. Si tu es motivé, loyal et prêt à t'investir dans le RP — ta place est parmi nous.</p>
+  <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+    <a href="https://discord.gg/G4bmWN2s6S" class="btn-primary" target="_blank" rel="noopener">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057.1 18.079.11 18.1.132 18.115a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+      Rejoindre le Discord FKW
+    </a>
+    <a href="https://discord.gg/C7vUeGta3j" class="btn-secondary" target="_blank" rel="noopener">
+      Serveur GMod
+    </a>
+  </div>
+</div>
+
+<!-- ── FOOTER ─────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-logo">FKW | Faction <span>Kenway</span></div>
+  <p>Site non-officiel · Communauté DarkRP sur Le Monde des Débutants · TeamPeinard</p>
+  <ul class="footer-links" role="list">
+    <li><a href="https://discord.gg/G4bmWN2s6S" target="_blank" rel="noopener">Discord FKW</a></li>
+    <li><a href="https://discord.gg/C7vUeGta3j" target="_blank" rel="noopener">Discord GMod</a></li>
+    <li><a href="https://forum.teampeinard.net/portal.php" target="_blank" rel="noopener">Forum</a></li>
+  </ul>
+</footer>
+
+<script>
+  // ── Hamburger menu ──────────────────────────────────────────
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', open);
+  });
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  // ── FAQ accordion ───────────────────────────────────────────
+  document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(el => {
+        el.classList.remove('open');
+        el.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+
+  // ── Nav shrink on scroll ────────────────────────────────────
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    if (window.scrollY > 40) {
+      nav.style.borderBottomColor = 'rgba(255,255,255,.12)';
+    } else {
+      nav.style.borderBottomColor = 'rgba(255,255,255,.08)';
+    }
+  }, { passive: true });
+
+  // ── Intersection observer: fade-in on scroll ────────────────
+  if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const style = document.createElement('style');
+    style.textContent = `
+      .fade-in { opacity: 0; transform: translateY(20px); transition: opacity .5s ease, transform .5s ease; }
+      .fade-in.visible { opacity: 1; transform: none; }
+    `;
+    document.head.appendChild(style);
+
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll('.rule-card, .step-card, .link-card, .rank-group, .faq-item').forEach(el => {
+      el.classList.add('fade-in');
+      obs.observe(el);
+    });
+  }
+</script>
+</body>
+</html>
